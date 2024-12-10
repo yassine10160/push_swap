@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yassinefahfouhi <yassinefahfouhi@studen    +#+  +:+       +#+        */
+/*   By: yafahfou <yafahfou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 15:54:25 by yassinefahf       #+#    #+#             */
-/*   Updated: 2024/12/09 23:43:20 by yassinefahf      ###   ########.fr       */
+/*   Updated: 2024/12/10 18:31:31 by yafahfou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void	swap(t_stack s)
+void	swap(t_stack s, char c)
 {
 	int	tmp;
 	int	size;
@@ -24,8 +24,14 @@ void	swap(t_stack s)
 		s.tab[size - 2] = s.tab[size - 1];
 		s.tab[size - 1] = tmp;
 	}
+	if (c == 's')
+		write(1, "ss\n", 3);
+	else if (c == 'a')
+		write(1, "sa\n", 3);
+	else if (c == 'b')
+		write(1, "sb\n", 3);
 }
-void	push(t_stack *s1, t_stack *s2)
+void	push(t_stack *s1, t_stack *s2, char c)
 {
 	if (s2->size > 0)
 	{
@@ -33,50 +39,43 @@ void	push(t_stack *s1, t_stack *s2)
 		s1->size += 1;
 		s2->size--;
 	}
+	if (c == 'a')
+		write(1, "pa\n", 3);
+	else if (c == 'b')
+		write(1, "pb\n", 3);
 }
 void	swap_both(t_stack s1, t_stack s2)
 {
-	swap(s1);
-	swap(s2);
+	swap(s1, 's');
+	swap(s2, 's');
 }
+
+void	reverse_rotate(t_stack s)
+{
+	int	i;
+	int	tmp;
+
+	i = s.size -1;
+	while (i > 0)
+	{
+		tmp = s.tab[i];
+		s.tab[i] = s.tab[i - 1];
+		s.tab[i - 1] = tmp;
+		i--;
+	}
+}
+
 void	rotate(t_stack s)
 {
 	int	i;
 	int	tmp;
-	int	first;
 
 	i = 0;
-	first = s.tab[s.size - 1];
-	while (i < s.size)
+	while (i < s.size - 1)
 	{
-		
+		tmp = s.tab[i];
+		s.tab[i] = s.tab[i + 1];
+		s.tab[i + 1] = tmp;
+		i++;
 	}
-}
-void	print_stack(t_stack s)
-{
-	printf("size: %d\n", s.size);
-	for (int i = 0; i < s.size; i++)
-	{
-		printf("%d\n", s.tab[i]);
-	}
-}
-int	main()
-{
-	t_stack	s;
-	t_stack	s2;
-
-	s.tab = (int *)malloc(15 * sizeof(int));
-	s2.tab = (int *)malloc(2 * sizeof(int));
-	s.size = 9;
-	s2.size = 2;
-	s2.tab[0] = 9;
-	// printf("%d\n", s2.tab[0]);
-	s2.tab[1] = 11;
-	for (int i = 0; i < 9; i++)
-		s.tab[i] = i;
-	// swap(s);
-	// print_stack(s);
-	push(&s, &s2);
-	swap_both(s, s2);
-	print_stack(s);
 }
