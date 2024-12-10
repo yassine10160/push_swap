@@ -6,7 +6,7 @@
 /*   By: yassinefahfouhi <yassinefahfouhi@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 19:35:28 by yassinefahf       #+#    #+#             */
-/*   Updated: 2024/12/09 20:24:32 by yassinefahf      ###   ########.fr       */
+/*   Updated: 2024/12/10 18:50:47 by yafahfou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define PUSH_SWAP_H
 #include <stdlib.h>
 #include <stdio.h>
-
+#include <unistd.h>
 typedef struct s_stack{
 
 	int	size;
