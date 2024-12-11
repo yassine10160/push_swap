@@ -6,73 +6,78 @@
 /*   By: yafahfou <yafahfou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 16:48:41 by yafahfou          #+#    #+#             */
-/*   Updated: 2024/12/10 18:42:51 by yafahfou         ###   ########.fr       */
+/*   Updated: 2024/12/11 16:22:47 by yafahfou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-int     ft_atoi(const char *str)
-{
-        size_t  i;
-        long    total;
-        long    sign;
 
-        i = 0;
-        total = 0;
-        sign = 1;
-        while (str && (str[i] == ' ' || ('\t' <= str[i] && str[i] <= '\r')))
-                i++;
-        if (str && (str[i] == '-' || str[i] == '+'))
-        {
-                if (str[i] == '-')
-                        sign = -1;
-                i++;
-        }
-        while (str && ('0' <= str[i] && str[i] <= '9'))
-        {
-                total = (total * 10) + (str[i] - 48);
-                i++;
-        }
-        return (total * sign);
-}
-
-void	print_stack(t_stack s)
+void	print_stack(t_stack a)
 {
-	printf("size: %d\n", s.size);
-	for (int i = 0; i < s.size; i++)
+	printf("size: %d\n", a.size);
+	for (int i = 0; i < a.size; i++)
 	{
-		printf("%d\n", s.tab[i]);
+		printf("%d\n", a.tab[i]);
 	}
 }
+
+int	operation_cost(int n, t_stack b, int pos)
+{
+	int	i;
+	int	cost;
+
+	i = 0;
+	cost = 0;
+	if (is_new_biggest_or_smallest(n, b))
+	{
+		cost += bring_to_top_cost(pos, b);
+	}
+}
+
+int	least_operation_cost(t_stack a, t_stack b)
+{
+	int	i;
+	int	cost;
+	int	tmp;
+
+	i = a.size - 1;
+	cost = operation_cost(a.tab[i], b, i);
+	// faire  la fonction operation cost 
+	while (i >= 0)
+	{
+		tmp = operation_cost(a.tab[i], b, i);
+		if (tmp < cost)
+			cost = tmp;
+		i--;
+	}
+	return (cost);
+}
+// check input : faut pas qu'il y ait deux nombres egaux. verifier int max
 #include <stdio.h>
 int	main(int ac, char **av)
 {
-	t_stack	s;
-	t_stack	s2;
+	t_stack	a;
+	t_stack	b;
 	int		i;
 	int		j;
 
 	j = 0;
 	i = ac - 1;
-	s.tab = (int *)malloc((ac - 1) * sizeof(int));
-	s2.tab = (int *)malloc((ac - 4) * sizeof(int));
-	s.size = ac - 1;
-	s2.size = 0;
+	a.tab = (int *)malloc((ac - 1) * sizeof(int));
+	b.tab = (int *)malloc((ac - 4) * sizeof(int));
+	a.size = ac - 1;
+	b.size = 0;
 	while (i > 0)
 	{
-		s.tab[j] = ft_atoi(av[i]);
+		a.tab[j] = ft_atoi(av[i]);
 		i--;
 		j++;
 	}
-	// s2.tab[0] = 9;
-	// printf("%d\n", s2.tab[0]);
-	// s2.tab[1] = 11;
-	// swap(s);
-	print_stack(s);
-	push(&s2, &s, 'b');
-	// swap_both(s, s2);
-	//reverse_rotate_both(s, s2);
-	//print_stack(s);
-	print_stack(s2);
+	// push(&b, &a, 'b');
+	// push(&b, &a, 'b');
+	// print_stack(b);
+	print_stack(a);
+	printf("pos: %d\n", j);
+	// sort_stack(a, b);
 }

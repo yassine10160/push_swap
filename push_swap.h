@@ -6,7 +6,7 @@
 /*   By: yafahfou <yafahfou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 19:35:28 by yassinefahf       #+#    #+#             */
-/*   Updated: 2024/12/10 18:14:12 by yafahfou         ###   ########.fr       */
+/*   Updated: 2024/12/11 15:27:51 by yafahfou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,5 +31,8 @@ void	reverse_rotate(t_stack s);
 void	reverse_rotate_both(t_stack s1, t_stack s2);
 void	rotate(t_stack s);
 void	rotate_both(t_stack s1, t_stack s2);
+int     ft_atoi(const char *str);
+int		is_new_biggest_or_smallest(int n, t_stack b);
+int		pos_of_biggest(t_stack b);
 
 #endif
