@@ -6,7 +6,7 @@
 /*   By: yafahfou <yafahfou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 19:35:28 by yassinefahf       #+#    #+#             */
-/*   Updated: 2024/12/11 15:27:51 by yafahfou         ###   ########.fr       */
+/*   Updated: 2024/12/11 18:15:27 by yafahfou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,13 @@ typedef struct s_stack{
 
 void	swap(t_stack s, char c);
 void	push(t_stack *s1, t_stack *s2, char c);
-void	rotate(t_stack s);
+void	rotate(t_stack *s);
 void	reverse_rotate(t_stack s);
 void	reverse_rotate_both(t_stack s1, t_stack s2);
-void	rotate(t_stack s);
 void	rotate_both(t_stack s1, t_stack s2);
 int     ft_atoi(const char *str);
 int		is_new_biggest_or_smallest(int n, t_stack b);
 int		pos_of_biggest(t_stack b);
+int		bring_to_top_cost(int pos, t_stack *b);
 
 #endif

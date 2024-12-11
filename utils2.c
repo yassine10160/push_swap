@@ -6,7 +6,7 @@
 /*   By: yafahfou <yafahfou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 16:50:31 by yafahfou          #+#    #+#             */
-/*   Updated: 2024/12/11 15:34:43 by yafahfou         ###   ########.fr       */
+/*   Updated: 2024/12/11 18:22:54 by yafahfou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,12 +91,28 @@ int	pos_of_biggest(t_stack b)
 		return(0);
 	return (max);
 }
-int	bring_to_top_cost(int pos, t_stack b)
+int	bring_to_top_cost(int pos, t_stack *b)
 {
 	int	i;
 
-	if (pos + 1 >= b.size)
+	i = 0;
+	if (pos == b->size - 1)
+		return (0);
+	else if (pos + 1 > b->size / 2)
 	{
-		
+		while (i < b->size - (pos + 1))
+		{
+			rotate(&b);
+			i++;
+		}
 	}
+	else
+	{
+		while (i < b->size - (pos + 2))
+		{
+			reverse_rotate(&b);
+			i++;
+		}
+	}
+	return (i);
 }

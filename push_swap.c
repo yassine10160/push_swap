@@ -6,7 +6,7 @@
 /*   By: yafahfou <yafahfou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 16:48:41 by yafahfou          #+#    #+#             */
-/*   Updated: 2024/12/11 16:22:47 by yafahfou         ###   ########.fr       */
+/*   Updated: 2024/12/11 18:27:17 by yafahfou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	print_stack(t_stack a)
 	}
 }
 
-int	operation_cost(int n, t_stack b, int pos)
+int	operation_cost(int n,int pos, t_stack b)
 {
 	int	i;
 	int	cost;
@@ -31,8 +31,9 @@ int	operation_cost(int n, t_stack b, int pos)
 	cost = 0;
 	if (is_new_biggest_or_smallest(n, b))
 	{
-		cost += bring_to_top_cost(pos, b);
+		cost += bring_to_top_cost(pos_of_biggest(b), &b);
 	}
+	return (cost);
 }
 
 int	least_operation_cost(t_stack a, t_stack b)
@@ -42,17 +43,18 @@ int	least_operation_cost(t_stack a, t_stack b)
 	int	tmp;
 
 	i = a.size - 1;
-	cost = operation_cost(a.tab[i], b, i);
+	cost = operation_cost(a.tab[i], i, b);
 	// faire  la fonction operation cost 
 	while (i >= 0)
 	{
-		tmp = operation_cost(a.tab[i], b, i);
+		tmp = operation_cost(a.tab[i], i, b);
 		if (tmp < cost)
 			cost = tmp;
 		i--;
 	}
 	return (cost);
 }
+
 // check input : faut pas qu'il y ait deux nombres egaux. verifier int max
 #include <stdio.h>
 int	main(int ac, char **av)

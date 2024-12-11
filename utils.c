@@ -6,7 +6,7 @@
 /*   By: yafahfou <yafahfou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 15:54:25 by yassinefahf       #+#    #+#             */
-/*   Updated: 2024/12/10 18:31:31 by yafahfou         ###   ########.fr       */
+/*   Updated: 2024/12/11 18:18:19 by yafahfou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,32 +50,32 @@ void	swap_both(t_stack s1, t_stack s2)
 	swap(s2, 's');
 }
 
-void	reverse_rotate(t_stack s)
+void	reverse_rotate(t_stack *s)
 {
 	int	i;
 	int	tmp;
 
-	i = s.size -1;
+	i = s->size -1;
 	while (i > 0)
 	{
-		tmp = s.tab[i];
-		s.tab[i] = s.tab[i - 1];
-		s.tab[i - 1] = tmp;
+		tmp = s->tab[i];
+		s->tab[i] = s->tab[i - 1];
+		s->tab[i - 1] = tmp;
 		i--;
 	}
 }
 
-void	rotate(t_stack s)
+void	rotate(t_stack *s)
 {
 	int	i;
 	int	tmp;
 
 	i = 0;
-	while (i < s.size - 1)
+	while (i < s->size - 1)
 	{
-		tmp = s.tab[i];
-		s.tab[i] = s.tab[i + 1];
-		s.tab[i + 1] = tmp;
+		tmp = s->tab[i];
+		s->tab[i] = s->tab[i + 1];
+		s->tab[i + 1] = tmp;
 		i++;
 	}
 }
