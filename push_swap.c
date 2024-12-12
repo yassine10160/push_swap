@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   push_swap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yafahfou <yafahfou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yassinefahfouhi <yassinefahfouhi@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 16:48:41 by yafahfou          #+#    #+#             */
-/*   Updated: 2024/12/12 18:03:08 by yafahfou         ###   ########.fr       */
+/*   Updated: 2024/12/12 23:30:32 by yassinefahf      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ void	print_stack(t_stack a)
 		printf("%d\n", a.tab[i]);
 	}
 }
-
 int	operation_cost(t_stack a,int pos, t_stack b, enum e_state e)
 {
 	int	i;
@@ -40,7 +39,10 @@ int	operation_cost(t_stack a,int pos, t_stack b, enum e_state e)
 	}
 	else
 	{
-		
+		cost = least_option(a, pos, nearest_big(b, a.tab[pos]), &b, e);
+		// faire la fonction least_option qui calcule la solution qui me coute le moins
+		// une fct qui return 1,2, 3 , ou 4, et on choisit donc laquelle parmi les 4 fonctions.
+		// on fait une fct return quelle option et una autre qui calcule en fonction du return
 	}
 	return (cost);
 }
