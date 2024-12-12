@@ -6,7 +6,7 @@
 /*   By: yafahfou <yafahfou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 16:48:41 by yafahfou          #+#    #+#             */
-/*   Updated: 2024/12/11 18:27:17 by yafahfou         ###   ########.fr       */
+/*   Updated: 2024/12/12 18:03:08 by yafahfou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,25 @@ void	print_stack(t_stack a)
 	}
 }
 
-int	operation_cost(int n,int pos, t_stack b)
+int	operation_cost(t_stack a,int pos, t_stack b, enum e_state e)
 {
 	int	i;
 	int	cost;
 
 	i = 0;
 	cost = 0;
-	if (is_new_biggest_or_smallest(n, b))
+	if ((is_middle_top(a, pos) && is_middle_top(b, nearest_big(b, a.tab[pos])))
+		|| (!is_middle_top(a, pos) && !is_middle_top(b, nearest_big(b, a.tab[pos]))))
 	{
-		cost += bring_to_top_cost(pos_of_biggest(b), &b);
+		cost += bring_to_top_cost(pos, &a, e, 'a');
+		if (is_new_biggest_or_smallest(a.tab[pos], b))
+			cost += bring_to_top_cost(pos_of_biggest(b), &b, e, 'b');
+		else
+			cost += bring_to_top_cost(nearest_big(b, a.tab[pos]), &b, e, 'b');
+	}
+	else
+	{
+		
 	}
 	return (cost);
 }
@@ -43,11 +52,11 @@ int	least_operation_cost(t_stack a, t_stack b)
 	int	tmp;
 
 	i = a.size - 1;
-	cost = operation_cost(a.tab[i], i, b);
+	cost = operation_cost(a, i, b, COST);
 	// faire  la fonction operation cost 
 	while (i >= 0)
 	{
-		tmp = operation_cost(a.tab[i], i, b);
+		tmp = operation_cost(a, i, b, COST);
 		if (tmp < cost)
 			cost = tmp;
 		i--;
@@ -76,10 +85,11 @@ int	main(int ac, char **av)
 		i--;
 		j++;
 	}
-	// push(&b, &a, 'b');
-	// push(&b, &a, 'b');
-	// print_stack(b);
+	push(&b, &a, 'b');
+	push(&b, &a, 'b');
+	print_stack(b);
 	print_stack(a);
-	printf("pos: %d\n", j);
+	j = least_operation_cost(a, b);
+	printf("cost: %d\n", j);
 	// sort_stack(a, b);
 }

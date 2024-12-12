@@ -6,7 +6,7 @@
 /*   By: yafahfou <yafahfou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 19:35:28 by yassinefahf       #+#    #+#             */
-/*   Updated: 2024/12/11 18:15:27 by yafahfou         ###   ########.fr       */
+/*   Updated: 2024/12/12 16:31:39 by yafahfou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,15 +24,26 @@ typedef struct s_stack{
 	int	*tab;
 } t_stack;
 
+enum	e_state
+{
+	OPS,
+	COST,
+};
+
 void	swap(t_stack s, char c);
 void	push(t_stack *s1, t_stack *s2, char c);
-void	rotate(t_stack *s);
-void	reverse_rotate(t_stack s);
+void	rotate(t_stack *s, char c);
+void	swap_both(t_stack s1, t_stack s2);
+void	reverse_rotate(t_stack *, char c);
 void	reverse_rotate_both(t_stack s1, t_stack s2);
 void	rotate_both(t_stack s1, t_stack s2);
-int     ft_atoi(const char *str);
+int		ft_atoi(const char *str);
 int		is_new_biggest_or_smallest(int n, t_stack b);
 int		pos_of_biggest(t_stack b);
-int		bring_to_top_cost(int pos, t_stack *b);
+int		bring_to_top_cost(int pos, t_stack *b, enum e_state e, char c);
+int		nearest_big(t_stack b, int pos);
+int		is_middle_top(t_stack a, int pos);
+int		operation_cost(t_stack a, int pos, t_stack b, enum e_state e);
+int		least_operation_cost(t_stack a, t_stack b);
 
 #endif

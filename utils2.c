@@ -6,21 +6,22 @@
 /*   By: yafahfou <yafahfou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 16:50:31 by yafahfou          #+#    #+#             */
-/*   Updated: 2024/12/11 18:22:54 by yafahfou         ###   ########.fr       */
+/*   Updated: 2024/12/12 17:49:03 by yafahfou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void	reverse_rotate_both(t_stack s1, t_stack s2)
+void	reverse_rotate_both(t_stack a, t_stack b)
 {
-	reverse_rotate(s1);
-	reverse_rotate(s2);
+	reverse_rotate(&a,'n');
+	reverse_rotate(&b, 'n');
+	write(1, "rrr\n", 4);
 }
-void	rotate_both(t_stack s1, t_stack s2)
+void	rotate_both(t_stack a, t_stack b)
 {
-	rotate(s1);
-	rotate(s2);
+	rotate(&a, 'n');
+	rotate(&b, 'n');
 }
 int     ft_atoi(const char *str)
 {
@@ -91,7 +92,7 @@ int	pos_of_biggest(t_stack b)
 		return(0);
 	return (max);
 }
-int	bring_to_top_cost(int pos, t_stack *b)
+int	bring_to_top_cost(int pos, t_stack *b, enum e_state e, char c)
 {
 	int	i;
 
@@ -102,7 +103,8 @@ int	bring_to_top_cost(int pos, t_stack *b)
 	{
 		while (i < b->size - (pos + 1))
 		{
-			rotate(&b);
+			if (e == OPS)
+				rotate(b, c);
 			i++;
 		}
 	}
@@ -110,9 +112,33 @@ int	bring_to_top_cost(int pos, t_stack *b)
 	{
 		while (i < b->size - (pos + 2))
 		{
-			reverse_rotate(&b);
+			if (e == OPS)
+				reverse_rotate(b, c);
 			i++;
 		}
 	}
 	return (i);
+}
+
+int	is_middle_top(t_stack a, int pos)
+{
+	if (pos + 1 > a.size / 2)
+		return (1);
+	else
+		return (0);
+}
+int	nearest_big(t_stack b, int element)
+{
+	int	near;
+	int	i;
+
+	i = 0;
+	near = b.tab[0];
+	while (i < b.size)
+	{
+		if (b.tab[i] < element && b.tab[i] > near)
+			near = i;
+		i++;
+	}
+	return (near);
 }
