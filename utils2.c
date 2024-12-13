@@ -6,7 +6,7 @@
 /*   By: yafahfou <yafahfou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 16:50:31 by yafahfou          #+#    #+#             */
-/*   Updated: 2024/12/12 17:49:03 by yafahfou         ###   ########.fr       */
+/*   Updated: 2024/12/13 14:52:01 by yafahfou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,32 +92,62 @@ int	pos_of_biggest(t_stack b)
 		return(0);
 	return (max);
 }
-int	bring_to_top_cost(int pos, t_stack *b, enum e_state e, char c)
+int	bring_to_top_cost(int pos, t_stack *s, enum e_state e, char c)
 {
 	int	i;
 
 	i = 0;
-	if (pos == b->size - 1)
+	if (pos == s->size - 1)
 		return (0);
-	else if (pos + 1 > b->size / 2)
+	else if (pos + 1 >= s->size / 2 || s->c == 'u')
 	{
-		while (i < b->size - (pos + 1))
+		while (i < s->size - (pos + 1))
 		{
 			if (e == OPS)
-				rotate(b, c);
+				rotate(s, c);
 			i++;
 		}
 	}
-	else
+	else if (pos + 1 < s->size / 2 || s->c == 'd')
 	{
-		while (i < b->size - (pos + 2))
+		while (i < s->size - (pos + 2))
 		{
 			if (e == OPS)
-				reverse_rotate(b, c);
+				reverse_rotate(s, c);
 			i++;
 		}
 	}
 	return (i);
+}
+
+void	do_ops_least_option(t_stack *a, t_stack *b)
+{
+	bring_to_top_cost(a->pos, a, OPS, 'a');
+	bring_to_top_cost(b->pos, b, OPS, 'b');
+}
+void	up_or_down_option(t_stack *a, t_stack *b, int option)
+{
+	if (option == 1)
+	{
+		a->c = 'u';
+		b->c = 'u';
+	}
+	else if (option == 2)
+	{
+		a->c = 'u';
+		b->c = 'd';
+	}
+	else if (option == 3)
+	{
+		a->c = 'd';
+		b->c = 'u';
+	}
+	else
+	{
+		a->c = 'd';
+		b->c = 'd';
+	}
+	do_ops_least_option(a, b);
 }
 
 int	is_middle_top(t_stack a, int pos)
@@ -127,11 +157,13 @@ int	is_middle_top(t_stack a, int pos)
 	else
 		return (0);
 }
-int	nearest_big(t_stack b, int element)
+int	nearest_big(t_stack b, int pos)
 {
 	int	near;
 	int	i;
+	int	element;
 
+	element = b.tab[pos];
 	i = 0;
 	near = b.tab[0];
 	while (i < b.size)
@@ -141,4 +173,22 @@ int	nearest_big(t_stack b, int element)
 		i++;
 	}
 	return (near);
+}
+int	find_min(int a, int b)
+{
+	if (a <= b)
+		return (a);
+	else
+		return (b);
+}
+int	find_min_operation(int a, int b, int c, int d)
+{
+	if (a <= b && a <= c && a <= d)
+		return(a);
+	else if (b <= a && b <= c && b <= d)
+		return (b);
+	else if (c <= a && c <= b && c <= d)
+		return (c);
+	else
+		return (d);
 }
