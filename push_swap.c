@@ -6,7 +6,7 @@
 /*   By: yafahfou <yafahfou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 16:48:41 by yafahfou          #+#    #+#             */
-/*   Updated: 2024/12/13 14:54:44 by yafahfou         ###   ########.fr       */
+/*   Updated: 2024/12/13 15:45:16 by yafahfou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	least_option(t_stack *a, int posb, t_stack *b, enum e_state e)
 	int	op4;
 	int	res;
 	int	min;
-
+ 
 	b->pos = posb;
 	min = find_min((a->size - a->pos + 1),(b->size - posb + 1));
 	op1 = (a->size - a->pos + 1) + (b->size - posb + 1) - min;
@@ -85,6 +85,7 @@ int	least_operation_cost(t_stack *a, t_stack *b, enum e_state e)
 
 	i = a->size - 1;
 	a->pos = i;
+	i--;
 	cost = operation_cost(*a, *b, e);
 	// faire  la fonction operation cost 
 	while (i >= 0)
@@ -98,6 +99,7 @@ int	least_operation_cost(t_stack *a, t_stack *b, enum e_state e)
 		}	
 		i--;
 	}
+	a->pos = a->realpos;
 	return (cost);
 }
 void	push_swap(t_stack a, t_stack b)
@@ -132,9 +134,9 @@ int	main(int ac, char **av)
 		i--;
 		j++;
 	}
+	push(&b, &a, 'b');
+	push(&b, &a, 'b');
 	push_swap(a, b);
-	// push(&b, &a, 'b');
-	// push(&b, &a, 'b');
 	// print_stack(b);
 	// print_stack(a);
 	// j = least_operation_cost(a, b);
