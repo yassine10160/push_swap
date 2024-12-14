@@ -6,7 +6,7 @@
 /*   By: yafahfou <yafahfou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 16:50:31 by yafahfou          #+#    #+#             */
-/*   Updated: 2024/12/13 14:52:01 by yafahfou         ###   ########.fr       */
+/*   Updated: 2024/12/14 15:13:46 by yafahfou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,22 +157,26 @@ int	is_middle_top(t_stack a, int pos)
 	else
 		return (0);
 }
-int	nearest_big(t_stack b, int pos)
+int	nearest_big(t_stack b, int element)
 {
 	int	near;
 	int	i;
-	int	element;
+	int	pos;
 
-	element = b.tab[pos];
+
 	i = 0;
 	near = b.tab[0];
+	pos = i;
 	while (i < b.size)
 	{
 		if (b.tab[i] < element && b.tab[i] > near)
-			near = i;
+		{
+			near = b.tab[i];
+			pos = i;
+		}
 		i++;
 	}
-	return (near);
+	return (pos);
 }
 int	find_min(int a, int b)
 {

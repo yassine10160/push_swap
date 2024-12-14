@@ -6,7 +6,7 @@
 /*   By: yafahfou <yafahfou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 16:48:41 by yafahfou          #+#    #+#             */
-/*   Updated: 2024/12/13 15:45:16 by yafahfou         ###   ########.fr       */
+/*   Updated: 2024/12/14 15:14:35 by yafahfou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,25 +51,25 @@ int	least_option(t_stack *a, int posb, t_stack *b, enum e_state e)
 	}
 	return (res);
 }
-int	operation_cost(t_stack a, t_stack b, enum e_state e)
+int	operation_cost(t_stack *a, t_stack *b, enum e_state e)
 {
 	int	i;
 	int	cost;
 
 	i = 0;
 	cost = 0;
-	if ((is_middle_top(a, a.pos) && is_middle_top(b, nearest_big(b, a.pos)))
-		|| (!is_middle_top(a, a.pos) && !is_middle_top(b, nearest_big(b, a.pos))))
+	if ((is_middle_top(*a, a->pos) && is_middle_top(*b, nearest_big(*b, a->pos)))
+		|| (!is_middle_top(*a, a->pos) && !is_middle_top(*b, nearest_big(*b, a->pos))))
 	{
-		cost += bring_to_top_cost(a.pos, &a, e, 'a');
-		if (is_new_biggest_or_smallest(a.tab[a.pos], b))
-			cost += bring_to_top_cost(pos_of_biggest(b), &b, e, 'b');
+		cost += bring_to_top_cost(a->pos, a, e, 'a');
+		if (is_new_biggest_or_smallest(a->tab[a->pos], *b))
+			cost += bring_to_top_cost(pos_of_biggest(*b), b, e, 'b');
 		else
-			cost += bring_to_top_cost(nearest_big(b, a.tab[a.pos]), &b, e, 'b');
+			cost += bring_to_top_cost(nearest_big(*b, a->tab[a->pos]), b, e, 'b');
 	}
 	else
 	{
-		cost = least_option(&a, nearest_big(b, a.tab[a.pos]), &b, e);
+		cost = least_option(a, nearest_big(*b, a->tab[a->pos]), b, e);
 		// faire la fonction least_option qui calcule la solution qui me coute le moins
 		// une fct qui return 1,2, 3 , ou 4, et on choisit donc laquelle parmi les 4 fonctions.
 		// on fait une fct return quelle option et una autre qui calcule en fonction du return
@@ -85,13 +85,14 @@ int	least_operation_cost(t_stack *a, t_stack *b, enum e_state e)
 
 	i = a->size - 1;
 	a->pos = i;
+	a->realpos = i;
 	i--;
-	cost = operation_cost(*a, *b, e);
+	cost = operation_cost(a, b, e);
 	// faire  la fonction operation cost 
 	while (i >= 0)
 	{
 		a->pos = i;
-		tmp = operation_cost(*a, *b, e);
+		tmp = operation_cost(a, b, e);
 		if (tmp < cost)
 		{
 			cost = tmp;
@@ -109,7 +110,7 @@ void	push_swap(t_stack a, t_stack b)
 	while (a.size > 3)
 	{
 		res = least_operation_cost(&a, &b, COST);
-		res = operation_cost(a, b, OPS);
+		res = operation_cost(&a, &b, OPS);
 		push(&b, &a, 'b');
 	}
 }
@@ -137,7 +138,7 @@ int	main(int ac, char **av)
 	push(&b, &a, 'b');
 	push(&b, &a, 'b');
 	push_swap(a, b);
-	// print_stack(b);
+	print_stack(b);
 	// print_stack(a);
 	// j = least_operation_cost(a, b);
 	// printf("cost: %d\n", j);

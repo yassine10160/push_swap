@@ -6,7 +6,7 @@
 /*   By: yafahfou <yafahfou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 19:35:28 by yassinefahf       #+#    #+#             */
-/*   Updated: 2024/12/13 14:53:26 by yafahfou         ###   ########.fr       */
+/*   Updated: 2024/12/14 14:24:19 by yafahfou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,9 @@ int		ft_atoi(const char *str);
 int		is_new_biggest_or_smallest(int n, t_stack b);
 int		pos_of_biggest(t_stack b);
 int		bring_to_top_cost(int pos, t_stack *s, enum e_state e, char c);
-int		nearest_big(t_stack b, int pso);
+int		nearest_big(t_stack b, int element);
 int		is_middle_top(t_stack a, int pos);
-int		operation_cost(t_stack a,t_stack b, enum e_state e);
+int		operation_cost(t_stack *a,t_stack *b, enum e_state e);
 int		least_operation_cost(t_stack *a, t_stack *b, enum e_state e);
 int		find_min(int a, int b);
 int		find_min_operation(int a, int b, int c, int d);
