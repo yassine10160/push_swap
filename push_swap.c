@@ -6,7 +6,7 @@
 /*   By: yafahfou <yafahfou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 16:48:41 by yafahfou          #+#    #+#             */
-/*   Updated: 2024/12/14 15:14:35 by yafahfou         ###   ########.fr       */
+/*   Updated: 2024/12/15 17:28:39 by yafahfou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,57 +23,64 @@ void	print_stack(t_stack a)
 }
 int	least_option(t_stack *a, int posb, t_stack *b, enum e_state e)
 {
-	int	op1;
-	int	op2;
-	int	op3;
-	int	op4;
-	int	res;
-	int	min;
+	t_option o;
  
 	b->pos = posb;
-	min = find_min((a->size - a->pos + 1),(b->size - posb + 1));
-	op1 = (a->size - a->pos + 1) + (b->size - posb + 1) - min;
-	op2 = (a->size - a->pos + 1) + (b->size - posb + 1);
-	op3 = (a->pos + 1) + (b->size - posb + 1);
-	min = find_min((a->pos + 1), (posb + 1));
-	op4 = (a->pos + 1) + (posb + 1) - min;
-	res = find_min_operation(op1, op2, op3, op4);
-	if (e == OPS)
+	if (e == COST)
 	{
-		if (res == op1)
+		o.min = find_min((a->size - (a->pos + 1)),(b->size - (posb + 1)));
+		o.op1 = ((a->size - (a->pos + 1)) + (b->size - (posb + 1))) - o.min;
+		o.op2 = (a->size - (a->pos + 1)) + (posb + 1);
+		o.op3 = (a->pos + 1) + (b->size - (posb + 1));
+		o.min = find_min((a->pos + 1), (posb + 1));
+		o.op4 = ((a->pos + 1) + (posb + 1)) - o.min;
+		o.res = find_min_operation(o.op1, o.op2, o.op3, o.op4);
+	}
+	else
+	{
+		if (o.res == o.op1)
 			up_or_down_option(a, b, 1);
-		else if (res == op2)
+		else if (o.res == o.op2)
 			up_or_down_option(a, b, 2);
-		else if (res == op3)
+		else if (o.res == o.op3)
 			up_or_down_option(a, b, 3);
 		else
 			up_or_down_option(a, b, 4);
 	}
-	return (res);
+	return (o.res);
 }
+// int	operation_cost(t_stack *a, t_stack *b, enum e_state e)
+// {
+// 	int	cost;
+// 	int	realcost;
+
+// 	cost = 0;
+// 	if ((is_middle_top(*a, a->pos) && is_middle_top(*b, nearest_big(*b, a->pos)))
+// 		|| (!is_middle_top(*a, a->pos) && !is_middle_top(*b, nearest_big(*b, a->pos))))
+// 	{
+// 		realcost = bring_to_top_cost(a->pos, a, e, 'a');
+// 		if (is_new_biggest_or_smallest(a->tab[a->pos], *b))
+// 			cost = bring_to_top_cost(pos_of_biggest(*b), b, e, 'b');
+// 		else
+// 			cost = bring_to_top_cost(nearest_big(*b, a->tab[a->pos]), b, e, 'b');
+// 		if (realcost > cost)
+// 			cost = realcost - cost;
+// 		else
+// 			cost = cost - realcost;
+// 	}
+// 	else
+// 		cost = least_option(a, nearest_big(*b, a->tab[a->pos]), b, e);
+// 	return (cost);
+// }
 int	operation_cost(t_stack *a, t_stack *b, enum e_state e)
 {
-	int	i;
 	int	cost;
 
-	i = 0;
 	cost = 0;
-	if ((is_middle_top(*a, a->pos) && is_middle_top(*b, nearest_big(*b, a->pos)))
-		|| (!is_middle_top(*a, a->pos) && !is_middle_top(*b, nearest_big(*b, a->pos))))
-	{
-		cost += bring_to_top_cost(a->pos, a, e, 'a');
-		if (is_new_biggest_or_smallest(a->tab[a->pos], *b))
-			cost += bring_to_top_cost(pos_of_biggest(*b), b, e, 'b');
-		else
-			cost += bring_to_top_cost(nearest_big(*b, a->tab[a->pos]), b, e, 'b');
-	}
+	if (is_new_smallest(a->tab[a->pos], *b))
+		cost = least_option(a, pos_of_biggest(*b), b, e);
 	else
-	{
 		cost = least_option(a, nearest_big(*b, a->tab[a->pos]), b, e);
-		// faire la fonction least_option qui calcule la solution qui me coute le moins
-		// une fct qui return 1,2, 3 , ou 4, et on choisit donc laquelle parmi les 4 fonctions.
-		// on fait une fct return quelle option et una autre qui calcule en fonction du return
-	}
 	return (cost);
 }
 
@@ -86,6 +93,7 @@ int	least_operation_cost(t_stack *a, t_stack *b, enum e_state e)
 	i = a->size - 1;
 	a->pos = i;
 	a->realpos = i;
+	// printf("realpos: %d\n", a->realpos);
 	i--;
 	cost = operation_cost(a, b, e);
 	// faire  la fonction operation cost 
@@ -109,7 +117,11 @@ void	push_swap(t_stack a, t_stack b)
 
 	while (a.size > 3)
 	{
+		
 		res = least_operation_cost(&a, &b, COST);
+		// res = least_option(&a, nearest_big(b, a.tab[a.pos]), &b, COST);
+		// res = bring_to_top_cost(a.realpos);
+		// printf("pos: %d\n", a.pos);
 		res = operation_cost(&a, &b, OPS);
 		push(&b, &a, 'b');
 	}
@@ -138,7 +150,7 @@ int	main(int ac, char **av)
 	push(&b, &a, 'b');
 	push(&b, &a, 'b');
 	push_swap(a, b);
-	print_stack(b);
+	// print_stack(b);
 	// print_stack(a);
 	// j = least_operation_cost(a, b);
 	// printf("cost: %d\n", j);

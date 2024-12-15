@@ -6,7 +6,7 @@
 /*   By: yafahfou <yafahfou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 19:35:28 by yassinefahf       #+#    #+#             */
-/*   Updated: 2024/12/14 14:24:19 by yafahfou         ###   ########.fr       */
+/*   Updated: 2024/12/15 17:26:36 by yafahfou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <limits.h>
 
 typedef struct s_stack{
 
@@ -24,6 +25,16 @@ typedef struct s_stack{
 	int		*tab;
 	int		realpos;
 } t_stack;
+
+typedef struct s_option
+{
+	int	op1;
+	int	op2;
+	int	op3;
+	int	op4;
+	int	res;
+	int	min;
+} t_option;
 
 enum	e_state
 {
@@ -50,5 +61,6 @@ int		find_min(int a, int b);
 int		find_min_operation(int a, int b, int c, int d);
 void	up_or_down_option(t_stack *a, t_stack *b, int option);
 void	do_ops_least_option(t_stack *a, t_stack *b);
+int		is_new_smallest(int n, t_stack b);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: yafahfou <yafahfou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 16:50:31 by yafahfou          #+#    #+#             */
-/*   Updated: 2024/12/14 15:13:46 by yafahfou         ###   ########.fr       */
+/*   Updated: 2024/12/15 17:43:24 by yafahfou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,19 +79,23 @@ int	pos_of_biggest(t_stack b)
 {
 	int	i;
 	int	max;
+	int	pos;
 
-	i = 1;
-	max = b.tab[0];
+	i = 0;
+	max = -1;
+	pos = INT_MIN;
 	while (i < b.size)
 	{
 		if (b.tab[i] > max)
-			max = i;
+		{
+			max = b.tab[i];
+			pos = i;
+		}
 		i++;
 	}
-	if (max == b.tab[0])
-		return(0);
-	return (max);
+	return (pos);
 }
+
 int	bring_to_top_cost(int pos, t_stack *s, enum e_state e, char c)
 {
 	int	i;
@@ -99,31 +103,63 @@ int	bring_to_top_cost(int pos, t_stack *s, enum e_state e, char c)
 	i = 0;
 	if (pos == s->size - 1)
 		return (0);
-	else if (pos + 1 >= s->size / 2 || s->c == 'u')
+	else if (pos + 1 >= (s->size / 2) || s->c == 'u')
 	{
-		while (i < s->size - (pos + 1))
+		while (i++ < s->size - (pos + 1))
 		{
 			if (e == OPS)
 				rotate(s, c);
-			i++;
 		}
 	}
-	else if (pos + 1 < s->size / 2 || s->c == 'd')
+	else if (pos + 1 < (s->size / 2) || s->c == 'd')
 	{
-		while (i < s->size - (pos + 2))
+		while (i++ < s->size - (pos + 2))
 		{
 			if (e == OPS)
 				reverse_rotate(s, c);
+		}
+	}
+	if (pos == 0)
+		i = 1;
+	return (i);
+}
+void	both_same_option(t_stack *a, t_stack *b)
+{
+	int	i;
+
+	i = 0;
+	if (a->c == 'u' && b->c == 'u')
+	{
+		i = a->pos;
+		while (i >= a->size / 2 && i >= b->size)
+		{
+			rotate_both(*a, *b);
 			i++;
 		}
 	}
-	return (i);
-}
-
-void	do_ops_least_option(t_stack *a, t_stack *b)
-{
+	else
+	{
+		i = a->pos;
+		while (i <= a->size / 2 && i <= b->size)
+		{
+			reverse_rotate_both(*a, *b);
+			i++;
+		}
+	}
 	bring_to_top_cost(a->pos, a, OPS, 'a');
 	bring_to_top_cost(b->pos, b, OPS, 'b');
+}
+void	do_ops_least_option(t_stack *a, t_stack *b)
+{
+	if (a->c == 'd' && b->c == 'd')
+		both_same_option(a, b);
+	else if (a->c == 'u' && b->c == 'u')
+		both_same_option(a, b);
+	else
+	{
+		bring_to_top_cost(a->pos, a, OPS, 'a');
+		bring_to_top_cost(b->pos, b, OPS, 'b');
+	}
 }
 void	up_or_down_option(t_stack *a, t_stack *b, int option)
 {
@@ -152,7 +188,7 @@ void	up_or_down_option(t_stack *a, t_stack *b, int option)
 
 int	is_middle_top(t_stack a, int pos)
 {
-	if (pos + 1 > a.size / 2)
+	if (pos + 1 >= a.size / 2)
 		return (1);
 	else
 		return (0);
@@ -165,8 +201,8 @@ int	nearest_big(t_stack b, int element)
 
 
 	i = 0;
-	near = b.tab[0];
-	pos = i;
+	near = INT_MIN;
+	pos = -1;
 	while (i < b.size)
 	{
 		if (b.tab[i] < element && b.tab[i] > near)
@@ -195,4 +231,19 @@ int	find_min_operation(int a, int b, int c, int d)
 		return (c);
 	else
 		return (d);
+}
+int	is_new_smallest(int n, t_stack b)
+{
+	int	i;
+	int	trigger;
+
+	i = 0;
+	trigger = 1;
+	while (i < b.size)
+	{
+		if (b.tab[i] < n)
+			trigger = 0;
+		i++;
+	}
+	return(trigger);
 }
