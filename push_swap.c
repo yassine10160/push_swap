@@ -6,7 +6,7 @@
 /*   By: yafahfou <yafahfou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 16:48:41 by yafahfou          #+#    #+#             */
-/*   Updated: 2024/12/15 17:28:39 by yafahfou         ###   ########.fr       */
+/*   Updated: 2024/12/17 18:12:34 by yafahfou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,19 @@
 void	print_stack(t_stack a)
 {
 	printf("size: %d\n", a.size);
-	for (int i = 0; i < a.size; i++)
+	for (int i = a.size - 1; i >= 0; i--)
 	{
 		printf("%d\n", a.tab[i]);
 	}
 }
+void	do_choice(t_stack *a, t_stack *b, int choice)
+{
+	up_or_down_option(a, b, choice);
+}
 int	least_option(t_stack *a, int posb, t_stack *b, enum e_state e)
 {
-	t_option o;
- 
+	t_option	o;
+
 	b->pos = posb;
 	if (e == COST)
 	{
@@ -35,52 +39,35 @@ int	least_option(t_stack *a, int posb, t_stack *b, enum e_state e)
 		o.min = find_min((a->pos + 1), (posb + 1));
 		o.op4 = ((a->pos + 1) + (posb + 1)) - o.min;
 		o.res = find_min_operation(o.op1, o.op2, o.op3, o.op4);
+		if (o.res == o.op1)
+			a->choice = 1;
+		else if (o.res == o.op2)
+			a->choice = 2;
+		else if (o.res == o.op3)
+			a->choice = 3;
+		else
+			a->choice = 4;
 	}
 	else
-	{
-		if (o.res == o.op1)
-			up_or_down_option(a, b, 1);
-		else if (o.res == o.op2)
-			up_or_down_option(a, b, 2);
-		else if (o.res == o.op3)
-			up_or_down_option(a, b, 3);
-		else
-			up_or_down_option(a, b, 4);
-	}
+		do_choice(a, b, a->realchoice);
 	return (o.res);
 }
-// int	operation_cost(t_stack *a, t_stack *b, enum e_state e)
-// {
-// 	int	cost;
-// 	int	realcost;
-
-// 	cost = 0;
-// 	if ((is_middle_top(*a, a->pos) && is_middle_top(*b, nearest_big(*b, a->pos)))
-// 		|| (!is_middle_top(*a, a->pos) && !is_middle_top(*b, nearest_big(*b, a->pos))))
-// 	{
-// 		realcost = bring_to_top_cost(a->pos, a, e, 'a');
-// 		if (is_new_biggest_or_smallest(a->tab[a->pos], *b))
-// 			cost = bring_to_top_cost(pos_of_biggest(*b), b, e, 'b');
-// 		else
-// 			cost = bring_to_top_cost(nearest_big(*b, a->tab[a->pos]), b, e, 'b');
-// 		if (realcost > cost)
-// 			cost = realcost - cost;
-// 		else
-// 			cost = cost - realcost;
-// 	}
-// 	else
-// 		cost = least_option(a, nearest_big(*b, a->tab[a->pos]), b, e);
-// 	return (cost);
-// }
 int	operation_cost(t_stack *a, t_stack *b, enum e_state e)
 {
 	int	cost;
+	int	posb;
 
 	cost = 0;
 	if (is_new_smallest(a->tab[a->pos], *b))
-		cost = least_option(a, pos_of_biggest(*b), b, e);
+	{
+		posb = pos_of_biggest(*b);
+		cost = least_option(a, posb, b, e);
+	}
 	else
-		cost = least_option(a, nearest_big(*b, a->tab[a->pos]), b, e);
+	{
+		posb = nearest_big(*b, a->tab[a->pos]);
+		cost = least_option(a, posb, b, e);
+	}
 	return (cost);
 }
 
@@ -93,16 +80,16 @@ int	least_operation_cost(t_stack *a, t_stack *b, enum e_state e)
 	i = a->size - 1;
 	a->pos = i;
 	a->realpos = i;
-	// printf("realpos: %d\n", a->realpos);
-	i--;
 	cost = operation_cost(a, b, e);
-	// faire  la fonction operation cost 
+	a->realchoice = a->choice;
+	i = i - 1;
 	while (i >= 0)
 	{
 		a->pos = i;
 		tmp = operation_cost(a, b, e);
 		if (tmp < cost)
 		{
+			a->realchoice = a->choice;
 			cost = tmp;
 			a->realpos = i;
 		}	
@@ -111,21 +98,49 @@ int	least_operation_cost(t_stack *a, t_stack *b, enum e_state e)
 	a->pos = a->realpos;
 	return (cost);
 }
+/**
+ * @warning this function only works if the size of the stack is equal to three
+ */
+int	is_sorted(t_stack*a)
+{
+	if (a->tab[a->size -1] > a->tab[a->size -2]
+		&& a->tab[a->size - 2] > a->tab[0])
+			return (0);
+	else if (a->tab[a->size - 1] < a->tab[a->size -2]
+		&& a->tab[a->size - 2] > a->tab[0])
+			return (0);
+	return (1);	
+}
+void	sort_three(t_stack *a)
+{
+	if (!is_sorted(a))
+		swap(*a, 'a');
+}
+
 void	push_swap(t_stack a, t_stack b)
 {
-	int res;
+	int	pos;
+	int	i;
 
+	i = 0;
 	while (a.size > 3)
 	{
 		
-		res = least_operation_cost(&a, &b, COST);
-		// res = least_option(&a, nearest_big(b, a.tab[a.pos]), &b, COST);
-		// res = bring_to_top_cost(a.realpos);
-		// printf("pos: %d\n", a.pos);
-		res = operation_cost(&a, &b, OPS);
+		least_operation_cost(&a, &b, COST);
+		operation_cost(&a, &b, OPS);
 		push(&b, &a, 'b');
 	}
+	sort_three(&a);
+	while (b.size > 0)
+	{
+		pos = nearest_small(a,b.tab[i]);
+		if (pos != a.size - 1)
+			bring_to_top_cost(pos, &a, OPS, 'n');
+		push(&a, &b, 'a');
+		i++;
+	}
 }
+
 // check input : faut pas qu'il y ait deux nombres egaux. verifier int max
 #include <stdio.h>
 int	main(int ac, char **av)

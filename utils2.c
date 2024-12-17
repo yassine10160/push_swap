@@ -6,7 +6,7 @@
 /*   By: yafahfou <yafahfou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 16:50:31 by yafahfou          #+#    #+#             */
-/*   Updated: 2024/12/15 17:43:24 by yafahfou         ###   ########.fr       */
+/*   Updated: 2024/12/17 18:11:30 by yafahfou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void	rotate_both(t_stack a, t_stack b)
 {
 	rotate(&a, 'n');
 	rotate(&b, 'n');
+	write(1, "rr\n", 3);
 }
 int     ft_atoi(const char *str)
 {
@@ -82,7 +83,7 @@ int	pos_of_biggest(t_stack b)
 	int	pos;
 
 	i = 0;
-	max = -1;
+	max = INT_MIN;
 	pos = INT_MIN;
 	while (i < b.size)
 	{
@@ -100,20 +101,20 @@ int	bring_to_top_cost(int pos, t_stack *s, enum e_state e, char c)
 {
 	int	i;
 
-	i = 0;
+	i = -1;
 	if (pos == s->size - 1)
 		return (0);
-	else if (pos + 1 >= (s->size / 2) || s->c == 'u')
+	else if (pos + 1 > (s->size / 2) || s->c == 'u')
 	{
-		while (i++ < s->size - (pos + 1))
+		while (++i < s->size - (pos + 1))
 		{
 			if (e == OPS)
 				rotate(s, c);
 		}
 	}
-	else if (pos + 1 < (s->size / 2) || s->c == 'd')
+	else if (pos + 1 <= (s->size / 2) || s->c == 'd')
 	{
-		while (i++ < s->size - (pos + 2))
+		while (++i < pos + 1)
 		{
 			if (e == OPS)
 				reverse_rotate(s, c);
@@ -123,44 +124,63 @@ int	bring_to_top_cost(int pos, t_stack *s, enum e_state e, char c)
 		i = 1;
 	return (i);
 }
-void	both_same_option(t_stack *a, t_stack *b)
+
+void	both_up_option(t_stack *a, t_stack *b)
 {
+	int	realsize;
 	int	i;
+	
+	i = 0;
+	realsize =  find_min((a->size - (a->pos + 1)),(b->size - (b->pos + 1)));
+	while (i < realsize)
+	{
+		rotate_both(*a, *b);
+		i++;
+	}
+	bring_to_top_cost(a->pos + i, a, OPS, 'a');
+	bring_to_top_cost(b->pos + i, b, OPS, 'b');
+}
+
+
+void	both_down_option(t_stack *a, t_stack *b)
+{
+	int	realsize;
+	int	i;
+	int	apos;
+	int	bpos;
 
 	i = 0;
-	if (a->c == 'u' && b->c == 'u')
+	apos = a->pos;
+	bpos = b->pos;
+	realsize = find_min((a->pos + 1), (b->pos + 1));
+	while (i < realsize)
 	{
-		i = a->pos;
-		while (i >= a->size / 2 && i >= b->size)
-		{
-			rotate_both(*a, *b);
-			i++;
-		}
+		reverse_rotate_both(*a, *b);
+		apos--;
+		bpos--;
+		if (apos == -1)
+			apos = a->size - 1;
+		else if (bpos == -1)
+			bpos = b->size - 1;
+		i++;
 	}
-	else
-	{
-		i = a->pos;
-		while (i <= a->size / 2 && i <= b->size)
-		{
-			reverse_rotate_both(*a, *b);
-			i++;
-		}
-	}
-	bring_to_top_cost(a->pos, a, OPS, 'a');
-	bring_to_top_cost(b->pos, b, OPS, 'b');
+	bring_to_top_cost(apos, a, OPS, 'a');
+	bring_to_top_cost(bpos, b, OPS, 'b');
 }
+
 void	do_ops_least_option(t_stack *a, t_stack *b)
 {
 	if (a->c == 'd' && b->c == 'd')
-		both_same_option(a, b);
+		both_down_option(a, b);
 	else if (a->c == 'u' && b->c == 'u')
-		both_same_option(a, b);
+		both_up_option(a, b);
 	else
 	{
 		bring_to_top_cost(a->pos, a, OPS, 'a');
 		bring_to_top_cost(b->pos, b, OPS, 'b');
 	}
 }
+
 void	up_or_down_option(t_stack *a, t_stack *b, int option)
 {
 	if (option == 1)
@@ -208,6 +228,27 @@ int	nearest_big(t_stack b, int element)
 		if (b.tab[i] < element && b.tab[i] > near)
 		{
 			near = b.tab[i];
+			pos = i;
+		}
+		i++;
+	}
+	return (pos);
+}
+int	nearest_small(t_stack a, int element)
+{
+	int	near;
+	int	i;
+	int	pos;
+
+
+	i = 0;
+	near = nearest_big(a, INT_MAX);
+	pos = pos_of_biggest(a);
+	while (i < a.size)
+	{
+		if (a.tab[i] > element && a.tab[i] < near)
+		{
+			near = a.tab[i];
 			pos = i;
 		}
 		i++;

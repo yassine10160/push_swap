@@ -6,7 +6,7 @@
 /*   By: yafahfou <yafahfou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 15:54:25 by yassinefahf       #+#    #+#             */
-/*   Updated: 2024/12/12 16:24:25 by yafahfou         ###   ########.fr       */
+/*   Updated: 2024/12/17 15:29:42 by yafahfou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	swap_both(t_stack s1, t_stack s2)
 	swap(s2, 's');
 }
 
-void	reverse_rotate(t_stack *s, char c)
+void	rotate(t_stack *s, char c)
 {
 	int	i;
 	int	tmp;
@@ -64,16 +64,17 @@ void	reverse_rotate(t_stack *s, char c)
 		i--;
 	}
 	if (c == 'a')
-		write(1, "rra\n", 4);
+		write(1, "ra\n", 3);
 	else if (c == 'b')
-		write(1, "rrb\n", 4);
+		write(1, "rb\n", 3);
 }
 
-void	rotate(t_stack *s, char c)
+void	reverse_rotate(t_stack *s, char c)
 {
 	int	i;
 	int	tmp;
 
+	i = 0;
 	i = 0;
 	while (i < s->size - 1)
 	{
@@ -83,7 +84,7 @@ void	rotate(t_stack *s, char c)
 		i++;
 	}
 	if (c == 'a')
-		write(1, "ra\n", 3);
+		write(1, "rra\n", 4);
 	else if (c == 'b')
-		write(1, "rb\n", 3);
+		write(1, "rrb\n", 4);
 }
