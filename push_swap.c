@@ -6,7 +6,7 @@
 /*   By: yafahfou <yafahfou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 16:48:41 by yafahfou          #+#    #+#             */
-/*   Updated: 2024/12/17 18:12:34 by yafahfou         ###   ########.fr       */
+/*   Updated: 2024/12/17 19:53:23 by yafahfou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,11 +133,12 @@ void	push_swap(t_stack a, t_stack b)
 	sort_three(&a);
 	while (b.size > 0)
 	{
+		i = b.size - 1;
 		pos = nearest_small(a,b.tab[i]);
-		if (pos != a.size - 1)
-			bring_to_top_cost(pos, &a, OPS, 'n');
+		if (pos == -1)
+			pos = pos_of_smallest(a);
+		bring_to_top_cost(pos, &a, OPS, 'a');
 		push(&a, &b, 'a');
-		i++;
 	}
 }
 

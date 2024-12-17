@@ -6,7 +6,7 @@
 /*   By: yafahfou <yafahfou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 16:50:31 by yafahfou          #+#    #+#             */
-/*   Updated: 2024/12/17 18:11:30 by yafahfou         ###   ########.fr       */
+/*   Updated: 2024/12/17 19:52:25 by yafahfou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,6 +232,8 @@ int	nearest_big(t_stack b, int element)
 		}
 		i++;
 	}
+	if (b.c == 'z')
+		return (near);
 	return (pos);
 }
 int	nearest_small(t_stack a, int element)
@@ -242,8 +244,9 @@ int	nearest_small(t_stack a, int element)
 
 
 	i = 0;
-	near = nearest_big(a, INT_MAX);
-	pos = pos_of_biggest(a);
+	a.c = 'z';
+	near = INT_MAX;
+	pos = -1;
 	while (i < a.size)
 	{
 		if (a.tab[i] > element && a.tab[i] < near)
@@ -287,4 +290,24 @@ int	is_new_smallest(int n, t_stack b)
 		i++;
 	}
 	return(trigger);
+}
+int	pos_of_smallest(t_stack b)
+{
+	int	i;
+	int	max;
+	int	pos;
+
+	i = 0;
+	max = INT_MAX;
+	pos = INT_MAX;
+	while (i < b.size)
+	{
+		if (b.tab[i] < max)
+		{
+			max = b.tab[i];
+			pos = i;
+		}
+		i++;
+	}
+	return (pos);
 }

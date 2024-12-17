@@ -6,7 +6,7 @@
 /*   By: yafahfou <yafahfou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 19:35:28 by yassinefahf       #+#    #+#             */
-/*   Updated: 2024/12/17 18:13:19 by yafahfou         ###   ########.fr       */
+/*   Updated: 2024/12/17 19:52:38 by yafahfou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,4 +67,5 @@ void	do_ops_least_option(t_stack *a, t_stack *b);
 int		is_new_smallest(int n, t_stack b);
 void	print_stack(t_stack a);
 int		nearest_small(t_stack a, int element);
+int		pos_of_smallest(t_stack b);
 #endif
