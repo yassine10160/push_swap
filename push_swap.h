@@ -6,7 +6,7 @@
 /*   By: yafahfou <yafahfou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 19:35:28 by yassinefahf       #+#    #+#             */
-/*   Updated: 2024/12/17 19:52:38 by yafahfou         ###   ########.fr       */
+/*   Updated: 2024/12/18 15:42:54 by yafahfou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,4 +68,10 @@ int		is_new_smallest(int n, t_stack b);
 void	print_stack(t_stack a);
 int		nearest_small(t_stack a, int element);
 int		pos_of_smallest(t_stack b);
+int		is_sorted(t_stack*a);
+void	do_choice(t_stack *a, t_stack *b, int choice);
+int		least_option(t_stack *a, int posb, t_stack *b, enum e_state e);
+int		count_word(char const *s, char c);
+char	**ft_split(char const *s, char c);
+
 #endif

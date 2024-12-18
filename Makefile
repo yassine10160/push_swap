@@ -2,7 +2,7 @@ NAME=push_swap
 CC=cc
 FLAGS=-Wall -Wextra -Werror
 OBJDIR = .obj
-SRCS=utils.c utils2.c push_swap.c
+SRCS=utils.c utils2.c push_swap.c utils3.c utils4.c utils5.c ft_split.c
 HEADERS=push_swap.h
 OBJS=$(addprefix $(OBJDIR)/, $(SRCS:.c=.o))
 all: $(NAME)

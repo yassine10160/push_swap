@@ -6,25 +6,12 @@
 /*   By: yafahfou <yafahfou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 16:48:41 by yafahfou          #+#    #+#             */
-/*   Updated: 2024/12/17 19:53:23 by yafahfou         ###   ########.fr       */
+/*   Updated: 2024/12/18 15:45:20 by yafahfou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-
-void	print_stack(t_stack a)
-{
-	printf("size: %d\n", a.size);
-	for (int i = a.size - 1; i >= 0; i--)
-	{
-		printf("%d\n", a.tab[i]);
-	}
-}
-void	do_choice(t_stack *a, t_stack *b, int choice)
-{
-	up_or_down_option(a, b, choice);
-}
 int	least_option(t_stack *a, int posb, t_stack *b, enum e_state e)
 {
 	t_option	o;
@@ -51,24 +38,6 @@ int	least_option(t_stack *a, int posb, t_stack *b, enum e_state e)
 	else
 		do_choice(a, b, a->realchoice);
 	return (o.res);
-}
-int	operation_cost(t_stack *a, t_stack *b, enum e_state e)
-{
-	int	cost;
-	int	posb;
-
-	cost = 0;
-	if (is_new_smallest(a->tab[a->pos], *b))
-	{
-		posb = pos_of_biggest(*b);
-		cost = least_option(a, posb, b, e);
-	}
-	else
-	{
-		posb = nearest_big(*b, a->tab[a->pos]);
-		cost = least_option(a, posb, b, e);
-	}
-	return (cost);
 }
 
 int	least_operation_cost(t_stack *a, t_stack *b, enum e_state e)
@@ -98,23 +67,20 @@ int	least_operation_cost(t_stack *a, t_stack *b, enum e_state e)
 	a->pos = a->realpos;
 	return (cost);
 }
-/**
- * @warning this function only works if the size of the stack is equal to three
- */
-int	is_sorted(t_stack*a)
-{
-	if (a->tab[a->size -1] > a->tab[a->size -2]
-		&& a->tab[a->size - 2] > a->tab[0])
-			return (0);
-	else if (a->tab[a->size - 1] < a->tab[a->size -2]
-		&& a->tab[a->size - 2] > a->tab[0])
-			return (0);
-	return (1);	
-}
+
 void	sort_three(t_stack *a)
 {
+	int	pos;
+	
 	if (!is_sorted(a))
 		swap(*a, 'a');
+	pos = pos_of_smallest(*a);
+	if (a->tab[a->size - 1] > a->tab[a->size -2]
+		&& a->tab[a->size - 2] < a->tab[0]
+		&& a->tab[a->size - 1] < a->tab[0])
+			swap(*a, 'a');
+	else
+		bring_to_top_cost(pos, a, OPS, 'a');
 }
 
 void	push_swap(t_stack a, t_stack b)
@@ -130,6 +96,7 @@ void	push_swap(t_stack a, t_stack b)
 		operation_cost(&a, &b, OPS);
 		push(&b, &a, 'b');
 	}
+	a.c = 'y';
 	sort_three(&a);
 	while (b.size > 0)
 	{
@@ -140,35 +107,63 @@ void	push_swap(t_stack a, t_stack b)
 		bring_to_top_cost(pos, &a, OPS, 'a');
 		push(&a, &b, 'a');
 	}
+	pos = pos_of_smallest(a);
+	bring_to_top_cost(pos, &a, OPS, 'a');
 }
 
 // check input : faut pas qu'il y ait deux nombres egaux. verifier int max
-#include <stdio.h>
+void	handle_many_args(t_stack *a, char **av, int ac)
+{
+	int	i;
+	int	j;
+
+	i = ac - 1;
+	j = 0;
+	a->tab = (int *)malloc((ac - 1) * sizeof(int));
+	a->size = ac - 1;
+	while (i > 0)
+		a->tab[j++] = ft_atoi(av[i--]);
+}
+void	handle_two_args(t_stack *a, char *s)
+{
+	char	**split;
+	int		i;
+	int		j;
+
+	split = ft_split(s, ' ');
+	i = count_word(s, ' ');
+	j = 0;
+	a->tab = (int *)malloc((i) * sizeof(int));
+	a->size = i;
+	while (i > 0)
+		a->tab[j++] = ft_atoi(split[i--]);
+}
+
+int	is_check(char **av)
+{
+	if (av)
+		return (1);
+	return (0);
+}
+//verifier qu ma liste estd deja triee , (faire  une fonction pour ca)
 int	main(int ac, char **av)
 {
 	t_stack	a;
 	t_stack	b;
-	int		i;
-	int		j;
 
-	j = 0;
-	i = ac - 1;
-	a.tab = (int *)malloc((ac - 1) * sizeof(int));
-	b.tab = (int *)malloc((ac - 4) * sizeof(int));
-	a.size = ac - 1;
-	b.size = 0;
-	while (i > 0)
+	if (is_check(av))
 	{
-		a.tab[j] = ft_atoi(av[i]);
-		i--;
-		j++;
+		if (ac == 2)
+		{
+			handle_two_args(&a, av[1]);
+		}
+		else
+			handle_many_args(&a, av, ac);	
+		b.tab = (int *)malloc((ac - 4) * sizeof(int));
+		b.size = 0;
+		push(&b, &a, 'b');
+		push(&b, &a, 'b');
+		push_swap(a, b);
 	}
-	push(&b, &a, 'b');
-	push(&b, &a, 'b');
-	push_swap(a, b);
-	// print_stack(b);
-	// print_stack(a);
-	// j = least_operation_cost(a, b);
-	// printf("cost: %d\n", j);
-	// sort_stack(a, b);
+
 }
