@@ -6,7 +6,7 @@
 /*   By: yafahfou <yafahfou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 16:48:41 by yafahfou          #+#    #+#             */
-/*   Updated: 2024/12/18 15:45:20 by yafahfou         ###   ########.fr       */
+/*   Updated: 2025/01/15 13:30:25 by yafahfou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ void	push_swap(t_stack a, t_stack b)
 	{
 		i = b.size - 1;
 		pos = nearest_small(a,b.tab[i]);
-		if (pos == -1)
+		if (pos == -1) 
 			pos = pos_of_smallest(a);
 		bring_to_top_cost(pos, &a, OPS, 'a');
 		push(&a, &b, 'a');
@@ -111,59 +111,37 @@ void	push_swap(t_stack a, t_stack b)
 	bring_to_top_cost(pos, &a, OPS, 'a');
 }
 
-// check input : faut pas qu'il y ait deux nombres egaux. verifier int max
-void	handle_many_args(t_stack *a, char **av, int ac)
+void	free_stacks(t_stack *a, t_stack *b)
 {
-	int	i;
-	int	j;
-
-	i = ac - 1;
-	j = 0;
-	a->tab = (int *)malloc((ac - 1) * sizeof(int));
-	a->size = ac - 1;
-	while (i > 0)
-		a->tab[j++] = ft_atoi(av[i--]);
+	free(a->tab);
+	free(b->tab);
 }
-void	handle_two_args(t_stack *a, char *s)
-{
-	char	**split;
-	int		i;
-	int		j;
-
-	split = ft_split(s, ' ');
-	i = count_word(s, ' ');
-	j = 0;
-	a->tab = (int *)malloc((i) * sizeof(int));
-	a->size = i;
-	while (i > 0)
-		a->tab[j++] = ft_atoi(split[i--]);
-}
-
-int	is_check(char **av)
-{
-	if (av)
-		return (1);
-	return (0);
-}
-//verifier qu ma liste estd deja triee , (faire  une fonction pour ca)
+// verifier les int max et les int min. la verif n'est pas bonne, je vais le faire avec les fcts handles;
 int	main(int ac, char **av)
 {
 	t_stack	a;
 	t_stack	b;
 
-	if (is_check(av))
+	if (ac == 2)
 	{
-		if (ac == 2)
-		{
-			handle_two_args(&a, av[1]);
-		}
-		else
-			handle_many_args(&a, av, ac);	
-		b.tab = (int *)malloc((ac - 4) * sizeof(int));
-		b.size = 0;
-		push(&b, &a, 'b');
-		push(&b, &a, 'b');
-		push_swap(a, b);
+		if (!is_two_check(av[1]))
+			return (handle_error());
+		handle_two_args(&a, av[1], &b);
 	}
-
+	else
+	{
+		if (!is_check(ac, av))
+			return(handle_error());
+		handle_many_args(&a, &b, av, ac);
+	}
+	if (is_double_or_max(a))
+		return (handle_error());
+	if (is_already_sorted(&a, &b))
+		return (0);
+	if (a.size > 3)
+		push(&b, &a, 'b');
+	if (a.size > 3)
+		push(&b, &a, 'b');
+	push_swap(a, b);
+	free_stacks(&a, &b);
 }

@@ -6,7 +6,7 @@
 /*   By: yafahfou <yafahfou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 16:50:31 by yafahfou          #+#    #+#             */
-/*   Updated: 2024/12/18 13:54:18 by yafahfou         ###   ########.fr       */
+/*   Updated: 2025/01/06 17:28:09 by yafahfou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ int     ft_atoi(const char *str)
                 total = (total * 10) + (str[i] - 48);
                 i++;
         }
+		if ((sign == 1 && total > INT_MAX) || (sign == -1 && total > (long)INT_MAX + 1))
+			return (-1);
         return (total * sign);
 }
 int	is_new_biggest_or_smallest(int n, t_stack b)

@@ -6,7 +6,7 @@
 /*   By: yafahfou <yafahfou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 13:48:45 by yafahfou          #+#    #+#             */
-/*   Updated: 2024/12/18 13:50:16 by yafahfou         ###   ########.fr       */
+/*   Updated: 2025/01/10 13:18:45 by yafahfou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	nearest_big(t_stack b, int element)
 	pos = -1;
 	while (i < b.size)
 	{
-		if (b.tab[i] < element && b.tab[i] > near)
+		if (b.tab[i] < element && b.tab[i] >= near)
 		{
 			near = b.tab[i];
 			pos = i;
@@ -54,7 +54,7 @@ int	nearest_small(t_stack a, int element)
 	pos = -1;
 	while (i < a.size)
 	{
-		if (a.tab[i] > element && a.tab[i] < near)
+		if (a.tab[i] > element && a.tab[i] <= near)
 		{
 			near = a.tab[i];
 			pos = i;

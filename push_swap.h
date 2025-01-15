@@ -6,7 +6,7 @@
 /*   By: yafahfou <yafahfou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 19:35:28 by yassinefahf       #+#    #+#             */
-/*   Updated: 2024/12/18 15:42:54 by yafahfou         ###   ########.fr       */
+/*   Updated: 2025/01/15 13:50:02 by yafahfou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,5 +73,15 @@ void	do_choice(t_stack *a, t_stack *b, int choice);
 int		least_option(t_stack *a, int posb, t_stack *b, enum e_state e);
 int		count_word(char const *s, char c);
 char	**ft_split(char const *s, char c);
-
+int		is_two_check(char *s);
+int		is_already_sorted(t_stack *a, t_stack *b);
+int		handle_error();
+void	handle_many_args(t_stack *a, t_stack *b, char **av, int ac);
+void	handle_two_args(t_stack *a, char *s, t_stack *b);
+int		is_double_or_max(t_stack a);
+int		is_dgt(char c);
+int		is_check(int ac, char **av);
+int		ft_strncmp(const char *s1, const char *s2, size_t n);
+void	free_stacks(t_stack *a, t_stack *b);
+void	free_tab_str(char **s);
 #endif
