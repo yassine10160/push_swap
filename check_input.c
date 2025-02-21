@@ -6,7 +6,7 @@
 /*   By: yafahfou <yafahfou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 15:31:37 by yafahfou          #+#    #+#             */
-/*   Updated: 2025/01/15 14:57:53 by yafahfou         ###   ########.fr       */
+/*   Updated: 2025/02/21 15:34:52 by yafahfou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@ void	handle_many_args(t_stack *a, t_stack *b, char **av, int ac)
 	b->size = 0;
 	b->tab = (int *)malloc((ac - 4) * sizeof(int));
 }
-void free_tab_str(char **s)
+
+void	free_tab_str(char **s)
 {
 	int	i;
 
@@ -48,6 +49,7 @@ void free_tab_str(char **s)
 	}
 	free(s);
 }
+
 void	handle_two_args(t_stack *a, char *s, t_stack *b)
 {
 	char	**split;
@@ -59,52 +61,48 @@ void	handle_two_args(t_stack *a, char *s, t_stack *b)
 	j = 0;
 	a->tab = (int *)malloc((i) * sizeof(int));
 	a->size = i;
-	i = i - 1;
-	while (i > 0)
+	while (--i >= 0)
 	{
 		a->tab[j] = ft_atoi(split[i]);
 		if (a->tab[j] == -1 && ft_strncmp(split[i], "-1", 2))
 		{
 			handle_error();
 			free(a->tab);
+			free_tab_str(split);
 			exit(1);
 		}
 		j++;
-		i--;
 	}
 	free_tab_str(split);
 	b->tab = (int *)malloc((count_word(s, ' ')) * sizeof(int));
 	b->size = 0;
 }
 
-int	is_double_or_max(t_stack a)
+int	is_double_or_max(t_stack *a, t_stack *b)
 {
 	int	i;
 	int	j;
 
 	i = 0;
-	while (i < a.size)
+	while (i < a->size)
 	{
 		j = i + 1;
-		while (j < a.size)
+		while (j < a->size)
 		{
-			__builtin_printf("indice de i %d\n", j);
-			__builtin_printf("size %d\n", a.size);
-			if (a.tab[i] == a.tab[j])
+			if (a->tab[i] == a->tab[j])
+			{
+				free_stacks(a, b);
 				return (1);
-			else if (a.tab[i] > INT_MAX || a.tab[i] < INT_MIN)
+			}
+			else if (a->tab[i] > INT_MAX || a->tab[i] < INT_MIN)
+			{
+				free_stacks(a, b);
 				return (1);
+			}
 			j++;
 		}
 		i++;
 	}
-	return (0);
-}
-
-int	is_dgt(char c)
-{
-	if ('0' <= (unsigned char)c && (unsigned char)c <= '9')
-		return (1);
 	return (0);
 }
 
@@ -126,7 +124,7 @@ int	is_check(int ac, char **av)
 				j++;
 				if (av[k][i] == '-')
 				{
-					if (av[k][j] && !is_dgt(av[k][j]))
+					if (!av[k][i + 1] || !is_dgt(av[k][i + 1]))
 						return (0);
 				}
 				else if (!is_dgt(av[k][i]) || (av[k][j] && !is_dgt(av[k][j])))

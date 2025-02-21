@@ -6,60 +6,64 @@
 /*   By: yafahfou <yafahfou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 16:50:31 by yafahfou          #+#    #+#             */
-/*   Updated: 2025/01/06 17:28:09 by yafahfou         ###   ########.fr       */
+/*   Updated: 2025/02/21 14:28:25 by yafahfou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void	reverse_rotate_both(t_stack a, t_stack b)
+void	reverse_rotate_both(t_stack *a, t_stack *b)
 {
-	reverse_rotate(&a,'n');
-	reverse_rotate(&b, 'n');
+	reverse_rotate(a, 'n');
+	reverse_rotate(b, 'n');
 	write(1, "rrr\n", 4);
 }
-void	rotate_both(t_stack a, t_stack b)
+
+void	rotate_both(t_stack *a, t_stack *b)
 {
-	rotate(&a, 'n');
-	rotate(&b, 'n');
+	rotate(a, 'n');
+	rotate(b, 'n');
 	write(1, "rr\n", 3);
 }
-int     ft_atoi(const char *str)
-{
-        size_t  i;
-        long    total;
-        long    sign;
 
-        i = 0;
-        total = 0;
-        sign = 1;
-        while (str && (str[i] == ' ' || ('\t' <= str[i] && str[i] <= '\r')))
-                i++;
-        if (str && (str[i] == '-' || str[i] == '+'))
-        {
-                if (str[i] == '-')
-                        sign = -1;
-                i++;
-        }
-        while (str && ('0' <= str[i] && str[i] <= '9'))
-        {
-                total = (total * 10) + (str[i] - 48);
-                i++;
-        }
-		if ((sign == 1 && total > INT_MAX) || (sign == -1 && total > (long)INT_MAX + 1))
+int	ft_atoi(const char *str)
+{
+	size_t	i;
+	long	total;
+	long	sign;
+
+	i = 0;
+	total = 0;
+	sign = 1;
+	while (str && (str[i] == ' ' || ('\t' <= str[i] && str[i] <= '\r')))
+		i++;
+	if (str && (str[i] == '-' || str[i] == '+'))
+	{
+		if (str[i] == '-')
+			sign = -1;
+		i++;
+	}
+	while (str && ('0' <= str[i] && str[i] <= '9'))
+	{
+		total = (total * 10) + (str[i] - 48);
+		if ((sign == 1 && total > INT_MAX)
+			|| (sign == -1 && total > (long)INT_MAX + 1))
 			return (-1);
-        return (total * sign);
+		i++;
+	}
+	return (total * sign);
 }
-int	is_new_biggest_or_smallest(int n, t_stack b)
+
+int	is_new_biggest_or_smallest(int n, t_stack *b)
 {
 	int	i;
 	int	trigger;
 
 	i = 0;
 	trigger = 1;
-	while (i < b.size)
+	while (i < b->size)
 	{
-		if (b.tab[i] > n)
+		if (b->tab[i] > n)
 			trigger = 0;
 		i++;
 	}
@@ -67,9 +71,9 @@ int	is_new_biggest_or_smallest(int n, t_stack b)
 		return (1);
 	i = 0;
 	trigger = 1;
-	while (i < b.size)
+	while (i < b->size)
 	{
-		if (b.tab[i] < n)
+		if (b->tab[i] < n)
 			trigger = 0;
 		i++;
 	}
@@ -78,7 +82,7 @@ int	is_new_biggest_or_smallest(int n, t_stack b)
 	return (0);
 }
 
-int	pos_of_biggest(t_stack b)
+int	pos_of_biggest(t_stack *b)
 {
 	int	i;
 	int	max;
@@ -87,11 +91,11 @@ int	pos_of_biggest(t_stack b)
 	i = 0;
 	max = INT_MIN;
 	pos = INT_MIN;
-	while (i < b.size)
+	while (i < b->size)
 	{
-		if (b.tab[i] > max)
+		if (b->tab[i] > max)
 		{
-			max = b.tab[i];
+			max = b->tab[i];
 			pos = i;
 		}
 		i++;

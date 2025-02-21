@@ -6,7 +6,7 @@
 /*   By: yafahfou <yafahfou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 16:48:41 by yafahfou          #+#    #+#             */
-/*   Updated: 2025/01/15 13:30:25 by yafahfou         ###   ########.fr       */
+/*   Updated: 2025/02/21 15:30:11 by yafahfou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	least_option(t_stack *a, int posb, t_stack *b, enum e_state e)
 	b->pos = posb;
 	if (e == COST)
 	{
-		o.min = find_min((a->size - (a->pos + 1)),(b->size - (posb + 1)));
+		o.min = find_min((a->size - (a->pos + 1)), (b->size - (posb + 1)));
 		o.op1 = ((a->size - (a->pos + 1)) + (b->size - (posb + 1))) - o.min;
 		o.op2 = (a->size - (a->pos + 1)) + (posb + 1);
 		o.op3 = (a->pos + 1) + (b->size - (posb + 1));
@@ -61,7 +61,7 @@ int	least_operation_cost(t_stack *a, t_stack *b, enum e_state e)
 			a->realchoice = a->choice;
 			cost = tmp;
 			a->realpos = i;
-		}	
+		}
 		i--;
 	}
 	a->pos = a->realpos;
@@ -71,52 +71,47 @@ int	least_operation_cost(t_stack *a, t_stack *b, enum e_state e)
 void	sort_three(t_stack *a)
 {
 	int	pos;
-	
+
 	if (!is_sorted(a))
-		swap(*a, 'a');
-	pos = pos_of_smallest(*a);
+		swap(a, 'a');
+	pos = pos_of_smallest(a);
 	if (a->tab[a->size - 1] > a->tab[a->size -2]
 		&& a->tab[a->size - 2] < a->tab[0]
 		&& a->tab[a->size - 1] < a->tab[0])
-			swap(*a, 'a');
+		swap(a, 'a');
 	else
 		bring_to_top_cost(pos, a, OPS, 'a');
 }
 
-void	push_swap(t_stack a, t_stack b)
+void	push_swap(t_stack *a, t_stack *b)
 {
 	int	pos;
 	int	i;
 
 	i = 0;
-	while (a.size > 3)
+	a->c = 'i';
+	b->c = 'i';
+	while (a->size > 3)
 	{
-		
-		least_operation_cost(&a, &b, COST);
-		operation_cost(&a, &b, OPS);
-		push(&b, &a, 'b');
+		least_operation_cost(a, b, COST);
+		operation_cost(a, b, OPS);
+		push(b, a, 'b');
 	}
-	a.c = 'y';
-	sort_three(&a);
-	while (b.size > 0)
+	a->c = 'y';
+	sort_three(a);
+	while (b->size > 0)
 	{
-		i = b.size - 1;
-		pos = nearest_small(a,b.tab[i]);
-		if (pos == -1) 
+		i = b->size - 1;
+		pos = nearest_small(a, b->tab[i]);
+		if (pos == -1)
 			pos = pos_of_smallest(a);
-		bring_to_top_cost(pos, &a, OPS, 'a');
-		push(&a, &b, 'a');
+		bring_to_top_cost(pos, a, OPS, 'a');
+		push(a, b, 'a');
 	}
 	pos = pos_of_smallest(a);
-	bring_to_top_cost(pos, &a, OPS, 'a');
+	bring_to_top_cost(pos, a, OPS, 'a');
 }
 
-void	free_stacks(t_stack *a, t_stack *b)
-{
-	free(a->tab);
-	free(b->tab);
-}
-// verifier les int max et les int min. la verif n'est pas bonne, je vais le faire avec les fcts handles;
 int	main(int ac, char **av)
 {
 	t_stack	a;
@@ -131,10 +126,10 @@ int	main(int ac, char **av)
 	else
 	{
 		if (!is_check(ac, av))
-			return(handle_error());
+			return (handle_error());
 		handle_many_args(&a, &b, av, ac);
 	}
-	if (is_double_or_max(a))
+	if (is_double_or_max(&a, &b))
 		return (handle_error());
 	if (is_already_sorted(&a, &b))
 		return (0);
@@ -142,6 +137,6 @@ int	main(int ac, char **av)
 		push(&b, &a, 'b');
 	if (a.size > 3)
 		push(&b, &a, 'b');
-	push_swap(a, b);
+	push_swap(&a, &b);
 	free_stacks(&a, &b);
 }
